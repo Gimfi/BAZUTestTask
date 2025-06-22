@@ -19,9 +19,10 @@ namespace Player.Network.View
 
         public override void OnNetworkSpawn()
         {
-            _currentHealth.Value = _maxHealth;
-            _hpText.text = _currentHealth.Value.ToString();
+            if (IsServer)
+                _currentHealth.Value = _maxHealth;
 
+            ShowHp(_currentHealth.Value);
             _currentHealth.OnValueChanged += OnValueChanged;
         }
 
@@ -32,15 +33,20 @@ namespace Player.Network.View
 
         private void OnValueChanged(int previousValue, int newValue)
         {
-            _hpText.text = newValue > 0 ? newValue.ToString() : "Zombie";
+            ShowHp(newValue);
+        }
+
+        private void ShowHp(int value)
+        {
+            _hpText.text = value > 0 ? value.ToString() : "Zombie";
         }
 
         public void TakeDamage(int damage)
         {
             if (IsServer)
             {
-                _currentHealth.Value -= damage;
-                _currentHealth.Value = Mathf.Max(_currentHealth.Value, 0);
+                damage = Mathf.Max(damage, 0);
+                _currentHealth.Value = Mathf.Max(_currentHealth.Value - damage, 0);
             }
         }
     }
