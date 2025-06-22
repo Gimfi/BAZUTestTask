@@ -36,7 +36,7 @@ namespace Projectiles.Network
         {
             while (!ct.IsCancellationRequested)
             {
-                transform.position += _direction * _speed * Time.deltaTime;
+                transform.position += _direction * (_speed * Time.deltaTime);
                 await UniTask.Yield();
             }
         }

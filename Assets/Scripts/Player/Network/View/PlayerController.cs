@@ -13,6 +13,9 @@ namespace Player.Network.View
         [SerializeField]
         private float _speed;
 
+        [SerializeField]
+        private CharacterController _characterController;
+
         private IInputService _inputService;
         private ICameraPivot _cameraPivot;
         private Vector2 _moveVector;
@@ -84,7 +87,7 @@ namespace Player.Network.View
         [ServerRpc]
         private void MoveServerRpc(Vector3 direction)
         {
-            transform.position += direction * _speed * Time.deltaTime;
+            _characterController.Move(direction * (_speed * Time.deltaTime));
         }
     }
 }
